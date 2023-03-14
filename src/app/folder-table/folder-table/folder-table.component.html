@@ -1,0 +1,138 @@
+<mat-card mat-elevation-z8 style="min-width: 500px">
+  <mat-card-header>
+    <mat-card-title>Select File</mat-card-title>
+    <mat-card-subtitle>by Construxiv</mat-card-subtitle>
+    <div style="flex-grow: 1"></div>
+
+    <button mat-icon-button >
+      <mat-icon>cached</mat-icon>
+    </button>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="full-width action-all">
+      <mat-icon class="mat-icon-svg" style="margin-top: 15px"
+        >search</mat-icon
+      >
+      <mat-form-field style="padding: 0 10px; width: 60%">
+        <mat-label>{{ "OPEN.SEARCH" }}</mat-label>
+        <input
+          id="search"
+          matInput
+          placeholder="{{ 'OPEN.SEARCH_PLACEHODER' }}"
+          autofocus
+        />
+        <!-- <input class="search-control" type="text" placeholder="Search" [(ngModel)]="searchText" #searchbar> -->
+        <mat-icon
+          *ngIf="searchValue !== null && searchValue !== ''"
+          style="position: absolute; top: 4px; right: 0; cursor: pointer"
+          icon="close"
+          color="dark"
+          size="medium"
+          (click)="resetSearchInput()"
+        >
+        </mat-icon>
+      </mat-form-field>
+      <div style="flex-grow: 1"></div>
+    </div>
+
+    <div
+      style="line-height: 24px; margin: 10px 0 30px 30px; position: relative"
+    >
+      <mat-icon
+        svgIcon="right"
+        style="width: 16px; height: 14px; margin-left: 8px"
+      ></mat-icon>
+      <div
+        class="relativepath"
+        style="cursor: pointer; position: absolute; top: 0px; left: 35px"
+      >
+        <span
+          *ngFor="let item of lstPath; let i = index"
+          (click)="updateRecentlyPath(i)"
+          ><span
+            class="text"
+            [ngClass]="i === lstPath.length - 1 ? '' : 'path'"
+            >{{ i === 0 ? "Root" : item }}</span
+          ><span
+            class="sub-text"
+            *ngIf="i !== lstPath.length - 1"
+            style="color: rgb(108, 119, 130)"
+          >
+            /
+          </span></span
+        >
+      </div>
+    </div>
+    <div style="display: flex; flex-grow: inherit; padding: 0 16px">
+      <div class="content">
+        <div class="main-content">
+          <span class="context" #context>Name</span>
+          <div class="cached-date">
+            <span>Created Date</span>
+          </div>
+          <div class="right-size">
+            <span>Size</span>
+          </div>
+
+          <div class="right-content">
+            <!--<mat-checkbox [checked]="actionToggle" (change)="toggleChangeSlide()"></mat-checkbox>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-list>
+      <cdk-virtual-scroll-viewport
+        itemSize="48"
+        minBufferPx="800"
+        maxBufferPx="1600"
+        class="cdk-virtual-scroll-tree"
+        appScrollCustom
+      >
+        <mat-list-item
+          [ngStyle]="inSearchMode ? { height: 'auto' } : {}"
+          *cdkVirtualFor="
+            let item of files| filter: searchText
+            let i = index;
+          "
+          (click)="navigate(item)"
+          matRipple
+
+        >
+          <div class="content">
+            <div class="left-content">
+              <button mat-icon-button [disabled]="item.isDirectory">
+                <mat-icon
+                  *ngIf="item.isDirectory"
+                  class="icon-status"
+                  [class.normal-icon]="true"
+                >
+                  {{ "folder_open" }}
+                </mat-icon>
+              </button>
+            </div>
+            <div class="main-content">
+              <span class="context">
+                <span class="filename">{{ item.name }}</span>
+                <span class="path" *ngIf="inSearchMode">{{
+                 item.path
+                }}</span>
+              </span>
+
+              <div class="cached-date">
+                <span>{{
+                  !item.isDirectory && item.cacheStatus === 2
+                    ? (item.createdDate)
+                    : ""
+                }}</span>
+              </div>
+              <div class="right-size">
+                <span>{{item?.size }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-list-item>
+      </cdk-virtual-scroll-viewport>
+    </mat-list>
+
+  </mat-card-content>
+</mat-card>
