@@ -1,39 +1,48 @@
-<mat-card mat-elevation-z8 style="min-width: 500px">
+
+<div>curr list {{currList.length}}</div>
+<div>ogi list {{ogiList.length}}</div>
+<div>show list {{showList.length}}</div>
+<div>temp list {{showList.length}}</div>
+<div>path {{lstPath.length}}</div>
+<mat-card
+  style="
+    min-width: 500px;
+    max-width: 800px;
+    margin-left: 200px;
+    margin-top: 100px;
+  "
+>
   <mat-card-header>
     <mat-card-title>Select File</mat-card-title>
     <mat-card-subtitle>by Construxiv</mat-card-subtitle>
     <div style="flex-grow: 1"></div>
 
-    <button mat-icon-button >
+    <button style="background-color: #ffff; border-width: 0px; cursor: pointer">
       <mat-icon>cached</mat-icon>
     </button>
   </mat-card-header>
   <mat-card-content>
     <div class="full-width action-all">
-      <mat-icon class="mat-icon-svg" style="margin-top: 15px"
-        >search</mat-icon
-      >
-      <mat-form-field style="padding: 0 10px; width: 60%">
-        <mat-label>{{ "OPEN.SEARCH" }}</mat-label>
+      <mat-icon style="margin-top: 15px">search</mat-icon>
+      <mat-form-field style="padding: 0 10px; width: 60%" appearance="outline">
+        <mat-label>Search</mat-label>
         <input
-          id="search"
           matInput
           type="text"
-          placeholder="search"
+          placeholder="Input here ..."
           [(ngModel)]="searchValue"
           (change)="search(searchValue)"
         />
         <mat-icon
           *ngIf="searchValue !== null && searchValue !== ''"
           style="position: absolute; top: 4px; right: 0; cursor: pointer"
-          icon="close"
           color="dark"
           size="medium"
           (click)="resetSearchInput()"
         >
-        </mat-icon>
+          close</mat-icon
+        >
       </mat-form-field>
-      <div style="flex-grow: 1"></div>
     </div>
 
     <div
@@ -65,17 +74,14 @@
       </div>
     </div>
     <div style="display: flex; flex-grow: inherit; padding: 0 16px">
-      <div class="content">
-        <div class="main-content">
-          <span class="context" #context>Name</span>
-          <div class="cached-date">
+      <div class="content" >
+        <div class="main-content" >
+          <span class="context" mat-sort-header="name" (click)="sort()">Name</span>
+          <div class="cached-date" mat-sort-header="size">
             <span>Created Date</span>
           </div>
           <div class="right-size">
             <span>Size</span>
-          </div>
-
-          <div class="right-content">
           </div>
         </div>
       </div>
@@ -86,60 +92,56 @@
         minBufferPx="800"
         maxBufferPx="1600"
         class="cdk-virtual-scroll-tree"
-        appScrollCustom
       >
         <mat-list-item
           [ngStyle]="inSearchMode ? { height: 'auto' } : {}"
-          *cdkVirtualFor="
-            let item of showList
-            let i = index;
-          "
-          (click)="navigate(item)"
+          *cdkVirtualFor="let item of showList; let i = index"
           matRipple
-
         >
           <div class="content">
-            <div class="left-content">
-              <button mat-icon-button [disabled]="item.isDirectory">
-                <mat-icon
-                  *ngIf="item.isDirectory"
-                  class="icon-status"
-                  [class.normal-icon]="true"
-                >
-                  {{ "folder_open" }}
-                </mat-icon>
-              </button>
+            <div class="left-content" (click)="navigate(item)">
+              <mat-icon *ngIf="item.isFolder"> folder_open </mat-icon>
+              <mat-icon *ngIf="!item.isFolder"> draft </mat-icon>
             </div>
             <div class="main-content">
-              <span class="context">
-                <span class="filename">{{ item.name }}</span>
-                <span class="path" *ngIf="inSearchMode">{{
-                 item.path
-                }}</span>
+              <span class="context" (click)="navigate(item)">
+                <span>{{ item.name }}</span>
+                <span class="path" *ngIf="inSearchMode">{{ item.path }}</span>
               </span>
-
-              <div class="cached-date">
-                <span>{{
-                  !item.isDirectory && item.cacheStatus === 2
-                    ? (item.createdDate)
-                    : ""
-                }}</span>
+              <div (click)="navigate(item)"
+                style="
+                  width: 200px !important;
+                  margin-right: 15px;
+                  display: flex;
+                  flex-direction: column !important;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <span>{{ item.createDate | date : "mediumDate" }}</span>
               </div>
-              <div class="right-size">
-                <span>{{item?.size }}</span>
+              <div (click)="navigate(item)"
+                style="
+                  width: 80px;
+                  margin-right: 20px;
+                  display: flex;
+                  flex-direction: row;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <span>{{ item?.size }}</span>
+              </div>
+              <div *ngIf="isRoot" style="margin-right: 10px;" (click)="removeitem(i)">
+                <mat-icon>delete</mat-icon>
               </div>
             </div>
           </div>
         </mat-list-item>
       </cdk-virtual-scroll-viewport>
     </mat-list>
-
   </mat-card-content>
 </mat-card>
-
-
-
-
 
 <!-- <div>
   <h2>Enter some text, and then press the "tab" key.</h2>
@@ -148,7 +150,7 @@
   <input
   type="text"
   (change)="changeCount = changeCount + 1;search(searchValue)"
-  placeholder="Enter some text here" 
+  placeholder="Enter some text here"
   [(ngModel)]="searchValue"
   />
 </div>

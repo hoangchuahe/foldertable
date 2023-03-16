@@ -12,4 +12,5 @@ export class FolderService {
     const files = of(FILES);
     return files;
   }
+
 }

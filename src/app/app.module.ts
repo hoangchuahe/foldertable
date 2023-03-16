@@ -12,14 +12,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatListModule} from '@angular/material/list';
 import {ScrollingModule} from '@angular/cdk/scrolling';
-import { FilterPipe } from './folder-table/service/search';
+//import { FilterPipe } from './folder-table/service/search';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     FolderTableComponent,
-    FilterPipe
+
   ],
   imports: [
     BrowserModule,

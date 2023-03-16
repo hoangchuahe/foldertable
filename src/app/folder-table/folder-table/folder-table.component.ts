@@ -1,27 +1,28 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FILES } from '../modal/mock-file';
 import { File } from '../modal/file';
 import { FolderService } from '../service/folder.service';
 
 import {MatIconModule} from '@angular/material/icon';
 import { Subject } from 'rxjs';
-import { FilterPipe } from '../service/search';
+// import { FilterPipe } from '../service/search';
 
 @Component({
   selector: 'app-folder-table',
   templateUrl: './folder-table.component.html',
   styleUrls: ['./folder-table.component.scss']
 })
-export class FolderTableComponent {
+export class FolderTableComponent{
   searchText:string;
   changeCount: number = 0;
   inSearchMode =false;
+  isRoot = true;
   public lstPath: any[] = ['.'];
-  showList: File[]=[];
+  showList: File[];
   tempList:any[]=[]
-  searchList:any[]=[]
-  ogiList:any[]=[]
-  currList:any=[]
+  searchList:any[]
+  ogiList:any[]
+  currList:any[]
   constructor(private folderService: FolderService,){}
   public searchValue: string = null;
   public handleKeyupSearch$ = new Subject<any>();
@@ -40,27 +41,32 @@ export class FolderTableComponent {
 
   updateRecentlyPath(index: number) {
     this.lstPath.splice(index + 1, this.lstPath.length - index - 1);
-    this.getFiles();
-    this.callBack(this.showList,this.lstPath[this.lstPath.length-1])
+    this.callBack(this.ogiList,this.lstPath[this.lstPath.length-1])
   }
 
 
 resetSearchInput() {
   this.searchValue = '';
-  this.handleKeyupSearch$.next('');
+  this.inSearchMode =false;
 }
 
- callBack(arr:any, val:string):void  {
+ callBack(arr:any, val:string) {
+  if(this.lstPath.length==1){
+    this.showList= this.ogiList
+    this.currList = this.ogiList
+    this.isRoot=true
+  }else{
   for(let obj of arr){
     if(obj.isFolder){
       if(obj.name === val){
         this.showList=obj.children
-        this.currList=this.showList
+        this.currList=obj.children
       }else{
         this.callBack(obj.children,val)
       }
     }
   }
+}
 }
 
   navigate(folder:any) {
@@ -68,7 +74,9 @@ resetSearchInput() {
       this.showList=folder.children;
       this.currList = this.showList
       this.lstPath.push(folder.name);
+      this.resetSearchInput()
     }
+    this.isRoot=false
   }
 
   getAllFilesInFolders(listTemp:any) {
@@ -83,6 +91,7 @@ resetSearchInput() {
 
   search(value:string){
     this.tempList=[]
+
     this.getAllFilesInFolders(this.currList)
     if(value===''||value===null){
       this.inSearchMode =false
@@ -96,6 +105,23 @@ resetSearchInput() {
       }
       this.showList=this.tempList
     }
+  }
+
+  sort(){
+    this.tempList=[]
+    this.showList.sort((a:any,b:any) => a.name > b.name ? 1 : -1)
+  }
+
+  removeitem(index:number){
+    this.tempList=[]
+    for(let i=0;i< this.ogiList.length;i++){
+      if(i!=index){
+        this.tempList.push(this.ogiList[i])
+      }
+    }
+    this.showList=this.tempList
+    this.ogiList=this.tempList
+
   }
 
 }
