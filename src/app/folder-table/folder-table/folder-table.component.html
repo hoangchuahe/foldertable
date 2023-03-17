@@ -1,4 +1,5 @@
 
+
 <mat-card
   style="
     min-width: 500px;
@@ -25,8 +26,9 @@
           matInput
           type="text"
           placeholder="Input here ..."
+          (change)="changeCount = changeCount + 1;search(searchValue);"
           [(ngModel)]="searchValue"
-          (change)="search(searchValue)"
+
         />
         <mat-icon
           *ngIf="searchValue !== null && searchValue !== ''"

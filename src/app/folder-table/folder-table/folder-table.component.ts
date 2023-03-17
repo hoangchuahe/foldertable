@@ -20,9 +20,9 @@ export class FolderTableComponent{
   public lstPath: any[] = ['.'];
   showList: File[];
   tempList:any[]=[]
-  searchList:any[]
-  ogiList:any[]
-  currList:any[]
+  searchList:any[]=[]
+  ogiList:any[]=[]
+  currList:any[]=[]
   constructor(private folderService: FolderService,){}
   public searchValue: string = null;
   public handleKeyupSearch$ = new Subject<any>();
@@ -91,7 +91,6 @@ resetSearchInput() {
 
   search(value:string){
     this.tempList=[]
-
     this.getAllFilesInFolders(this.currList)
     if(value===''||value===null){
       this.inSearchMode =false
