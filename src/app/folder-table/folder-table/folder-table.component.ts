@@ -91,6 +91,7 @@ resetSearchInput() {
 
   search(value:string){
     this.tempList=[]
+    this.searchList=[]
     this.getAllFilesInFolders(this.currList)
     if(value===''||value===null){
       this.inSearchMode =false
