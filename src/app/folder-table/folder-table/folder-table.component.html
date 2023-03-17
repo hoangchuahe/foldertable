@@ -1,9 +1,4 @@
 
-<div>curr list {{currList.length}}</div>
-<div>ogi list {{ogiList.length}}</div>
-<div>show list {{showList.length}}</div>
-<div>temp list {{showList.length}}</div>
-<div>path {{lstPath.length}}</div>
 <mat-card
   style="
     min-width: 500px;
@@ -81,7 +76,7 @@
             <span>Created Date</span>
           </div>
           <div class="right-size">
-            <span>Size</span>
+            <span #name (click)="sortnum()">Size</span>
           </div>
         </div>
       </div>
@@ -143,19 +138,3 @@
   </mat-card-content>
 </mat-card>
 
-<!-- <div>
-  <h2>Enter some text, and then press the "tab" key.</h2>
-  <p>(or just click outside of the text box)</p>
-  <h3>You have made {{changeCount}} changes so far.</h3>
-  <input
-  type="text"
-  (change)="changeCount = changeCount + 1;search(searchValue)"
-  placeholder="Enter some text here"
-  [(ngModel)]="searchValue"
-  />
-</div>
-<div *ngFor="let item of showList" (click)="navigate(item)">
-  <div>
-    {{item.name}}
-  </div>
-</div> -->

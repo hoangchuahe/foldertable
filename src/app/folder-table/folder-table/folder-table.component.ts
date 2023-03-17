@@ -108,8 +108,19 @@ resetSearchInput() {
   }
 
   sort(){
-    this.tempList=[]
-    this.showList.sort((a:any,b:any) => a.name > b.name ? 1 : -1)
+    let a: any[]=[]
+    for(let obj of this.currList){
+      a.push(obj)
+    }
+    this.showList=a.sort((a:any,b:any) => a.name > b.name ? 1 : -1)
+  }
+
+  sortnum(){
+    let a: any[]=[]
+    for(let obj of this.currList){
+      a.push(obj)
+    }
+    this.showList=a.sort((a:any,b:any) => a.size > b.size ? 1 : -1)
   }
 
   removeitem(index:number){
